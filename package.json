@@ -1,7 +1,7 @@
 {
-  "name": "postcss-indent",
+  "name": "postcss-fsu",
   "version": "1.0.0",
-  "description": "PostCSS Plugin to correct indentation",
+  "description": "PostCSS Plugin for fixing shit up",
   "main": "index.js",
   "scripts": {
     "test": "tape test/*.js"

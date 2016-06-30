@@ -1,34 +1,39 @@
 const test = require('tape');
 const postcss = require('postcss');
 const less = require('postcss-less');
-const indent = require('../index.js');
+const fsu = require('../index.js');
 const fs = require('fs');
 const path = require('path');
 
-function testFixture(test) {
-  return fs.readFileSync(
-    path.join(__dirname, 'fixtures', test, 'test.css'), 'utf-8');
+const indentOptions = {
+  modules: ['indentation'],
+  indent: {
+    amount: 2,
+    type: 'spaces'
+  }
 }
 
-function expectFixture(test) {
+function testFixture(module, test) {
   return fs.readFileSync(
-    path.join(__dirname, 'fixtures', test, 'expect.css'), 'utf-8'); 
+    path.join(__dirname, 'fixtures', module, test, 'test.css'), 'utf-8');
+}
+
+function expectFixture(module, test) {
+  return fs.readFileSync(
+    path.join(__dirname, 'fixtures', module, test, 'expect.css'), 'utf-8'); 
 }
 
 test('Indent nested rules', t => {
   t.plan(1);
 
   postcss([
-    indent({
-      amount: 2,
-      type: 'spaces'
-    })
+    fsu(indentOptions)
   ])
-  .process(testFixture('nested-rules'), {
+  .process(testFixture('indentation', 'nested-rules'), {
     syntax: less
   })
   .then(result => {
-    t.equal(result.css, expectFixture('nested-rules'));
+    t.equal(result.css, expectFixture('indentation', 'nested-rules'));
   });
 });
 
@@ -36,16 +41,13 @@ test('Indent less mixins', t => {
   t.plan(1);
 
   postcss([
-    indent({
-      amount: 2,
-      type: 'spaces'
-    })
+    fsu(indentOptions)
   ])
-  .process(testFixture('less-mixins'), {
+  .process(testFixture('indentation', 'less-mixins'), {
     syntax: less
   })
   .then(result => {
-    t.equal(result.css, expectFixture('less-mixins'));
+    t.equal(result.css, expectFixture('indentation', 'less-mixins'));
   });
 });
 
@@ -53,16 +55,13 @@ test('Indent less variables', t => {
   t.plan(1);
 
   postcss([
-    indent({
-      amount: 2,
-      type: 'spaces'
-    })
+    fsu(indentOptions)
   ])
-  .process(testFixture('less-variables'), {
+  .process(testFixture('indentation', 'less-variables'), {
     syntax: less
   })
   .then(result => {
-    t.equal(result.css, expectFixture('less-variables'));
+    t.equal(result.css, expectFixture('indentation', 'less-variables'));
   });
 });
 
@@ -70,31 +69,39 @@ test('Indent declarations', t => {
   t.plan(1);
 
   postcss([
-    indent({
-      amount: 2,
-      type: 'spaces'
-    })
+    fsu(indentOptions)
   ])
-  .process(testFixture('declarations'))
+  .process(testFixture('indentation', 'declarations'))
   .then(result => {
-    t.equal(result.css, expectFixture('declarations'));
+    t.equal(result.css, expectFixture('indentation', 'declarations'));
   });
 });
 
-test('Indent comments', t => {
+test('Indent single line comments', t => {
   t.plan(1);
 
   postcss([
-    indent({
-      amount: 2,
-      type: 'spaces'
-    })
+    fsu(indentOptions)
   ])
-  .process(testFixture('comments'), {
+  .process(testFixture('indentation', 'single-line-comments'), {
     syntax: less
   })
   .then(result => {
-    t.equal(result.css, expectFixture('comments'));
+    t.equal(result.css, expectFixture('indentation', 'single-line-comments'));
+  });
+});
+
+test('Indent multiline comments', t => {
+  t.plan(1);
+
+  postcss([
+    fsu(indentOptions)
+  ])
+  .process(testFixture('indentation', 'mutiline-comments'), {
+    syntax: less
+  })
+  .then(result => {
+    t.equal(result.css, expectFixture('indentation', 'mutiline-comments'));
   });
 });
 
@@ -102,13 +109,10 @@ test('Indent @rules', t => {
   t.plan(1);
 
   postcss([
-    indent({
-      amount: 2,
-      type: 'spaces'
-    })
+    fsu(indentOptions)
   ])
-  .process(testFixture('at-rules'))
+  .process(testFixture('indentation', 'at-rules'))
   .then(result => {
-    t.equal(result.css, expectFixture('at-rules'));
+    t.equal(result.css, expectFixture('indentation', 'at-rules'));
   });
 });
