@@ -4,7 +4,7 @@
   "description": "PostCSS Plugin for fixing shit up",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/*.js"
+    "test": "tape tests/**/test.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,4 +1,3 @@
-const postcss = require('postcss');
 const utils = require('./utils.js');
  
 function indentation(root, options) {
